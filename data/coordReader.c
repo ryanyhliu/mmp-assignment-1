@@ -23,6 +23,8 @@ int readNumOfCoords(char *filename){
 	int numOfCoords = 0;
 
 	if(file == NULL){
+		// close file
+		fclose(file);
 		return -1;
 	}
 
@@ -31,7 +33,7 @@ int readNumOfCoords(char *filename){
 	while(fgets(line, sizeof(line), file) != NULL){
 		numOfCoords++;
 	}
-	
+	fclose(file);
     return numOfCoords;
 }
 
@@ -44,6 +46,7 @@ double **readCoords(char *filename, int numOfCoords){
     
     if(file == NULL) {
         printf("Unable to open file: %s", filename);
+		fclose(file);
         return NULL;
     }
 
@@ -52,6 +55,7 @@ double **readCoords(char *filename, int numOfCoords){
 	for(i = 0; i < numOfCoords; i++){
 		coords[i] = (double *) malloc(2 * sizeof(int));
 		if (coords[i] == NULL){
+			fclose(file);
 			perror("Memory Allocation Failed");
 		}
 	}
@@ -65,7 +69,7 @@ double **readCoords(char *filename, int numOfCoords){
 			lineNum++;
 		}
 	}
-
+	fclose(file);
 	return coords;
 }
 
@@ -76,6 +80,7 @@ void *writeTourToFile(int *tour, int tourLength, char *filename){
 	
 	if(file == NULL){
 		printf("Unable to open file: %s", filename);
+		fclose(file);
 		return NULL;
 	}
 
@@ -86,6 +91,6 @@ void *writeTourToFile(int *tour, int tourLength, char *filename){
         fprintf(file, "%d ", tour[i]);
     }
 
-	
+	fclose(file);
 
 }
