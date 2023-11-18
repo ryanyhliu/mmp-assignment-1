@@ -26,19 +26,9 @@ echo "Requested CPUs per task      : $SLURM_CPUS_PER_TASK"
 echo "Scheduling priority          : $SLURM_PRIO_PROCESS"
 
 # parallel using OpenMP
-# SRC = $1 is name of the source code as an arguemnt
-SRC=$1
+# SRC = $1 is name of the executable as an arguemnt
+EXE=$1
 
-#sets the exe name as the sourcecode, and %% removes the ".c"
-EXE=${SRC%%.c}.exe
-
-#deletes the existing executable (if it exists)
-rm -f ${EXE}
-
-echo compiling $SRC to $EXE
-
-#compilation using intel compiler of sourcecode to exectuable.
-icc -no-multibyte-chars -qopenmp -O0 -std=c99 $SRC -o $EXE
 echo
 echo ------------------------------------
 
