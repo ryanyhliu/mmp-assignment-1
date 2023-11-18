@@ -14,9 +14,6 @@
 
 /*If there are any issues with this code, please contact: h.j.forbes@liverpool.ac.uk*/
 
-int readNumOfCoords(char *fileName);
-double **readCoords(char *filename, int numOfCoords);
-
 /*Gets the number of the coordinates in the file. Returns as a single integer*/
 int readNumOfCoords(char *filename){
 	FILE *file = fopen(filename, "r");
@@ -92,5 +89,5 @@ void *writeTourToFile(int *tour, int tourLength, char *filename){
     }
 
 	fclose(file);
-
+	return NULL;
 }

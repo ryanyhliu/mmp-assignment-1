@@ -6,86 +6,80 @@
 
 int readNumOfCoords(char *fileName);
 double **readCoords(char *filename, int numOfCoords);
+void *writeTourToFile(int *tour, int tourLength, char *filename);
+double **createDistanceMatrix(double **coords, int numOfCoords);
+void freeMemory(double **coords, double **distanceMatrix, int numOfCoords);
 int *findShortestTour(double **distanceMatrix, int numOfCoords);
 
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
-    // check
     printf("Starting cInsertion.c\n");
+
+    // Checking command line arguments
     if (argc < 3)
     {
         fprintf(stderr, "Usage: %s <coordinate file name> <output file name>\n", argv[0]);
-        return 1;
+        return 1; // Exit if not enough arguments
     }
 
-    char coordinateFileName[500];
-    char outputFileName[500];
-    strcpy(coordinateFileName, argv[1]);
-    strcpy(outputFileName, argv[2]);
-    int numOfCoords = readNumOfCoords(coordinateFileName);
-    printf("Number of coordinates: %d\n", numOfCoords);
-    double **coords = readCoords(coordinateFileName, numOfCoords);
-    // printf("First coordinate: %f, %f\n", coords[0][0], coords[0][1]);
+    int numOfCoords = readNumOfCoords(argv[1]);
+    double **coords = readCoords(argv[1], numOfCoords);
 
-    // convert this into a distance matrix with euclidean distance formula.
-    // init a 2d array of doubles: n x n
-    double **distanceMatrix = (double **)malloc(numOfCoords * sizeof(double *));
-    for (int i = 0; i < numOfCoords; i++)
-    {
-        distanceMatrix[i] = (double *)malloc(numOfCoords * sizeof(double));
-        if (distanceMatrix[i] == NULL)
-        {
-            perror("Memory Allocation Failed");
-        }
-    }
+    // Creating the distance matrix
+    double **distanceMatrix = createDistanceMatrix(coords, numOfCoords);
 
-    int calcCount = 0;
-    // fill the distance matrix with euclidean distances
-    for (int i = 0; i < numOfCoords; i++)
-    {
-        for (int j = 0; j < numOfCoords; j++)
-        {
-            if (i > j)
-            {
-                distanceMatrix[i][j] = distanceMatrix[j][i];
-                continue;
-            }
-            if (i == j)
-            {
-                distanceMatrix[i][j] = 0;
-                continue;
-            }
-            double x1 = coords[i][0];
-            double y1 = coords[i][1];
-            double x2 = coords[j][0];
-            double y2 = coords[j][1];
-            double distance = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
-            calcCount++;
-            distanceMatrix[i][j] = distance;
-        }
-    }
-    printf("Number of sqrt and pow calculations: %d\n", calcCount);
-
-    // print the distance matrix
-    for (int i = 0; i < numOfCoords; i++)
-    {
-        for (int j = 0; j < numOfCoords; j++)
-        {
-            printf("%f ", distanceMatrix[i][j]);
-        }
-        printf("\n");
-    }
-
-    // find the shortest tour
+    // Finding the shortest tour
     int *tour = findShortestTour(distanceMatrix, numOfCoords);
 
-    // print the tour
+    // Printing the tour
     for (int i = 0; i < numOfCoords + 1; i++)
     {
         printf("%d ", tour[i]);
     }
     printf("\n");
+
+    // Writing the tour to a file
+    writeTourToFile(tour, numOfCoords + 1, argv[2]);
+
+    // Freeing memory
+    freeMemory(coords, distanceMatrix, numOfCoords);
+    free(tour);
     return 0;
+}
+
+// Function to create a distance matrix
+double **createDistanceMatrix(double **coords, int numOfCoords)
+{
+    double **distanceMatrix = (double **)malloc(numOfCoords * sizeof(double *));
+    for (int i = 0; i < numOfCoords; i++)
+    {
+        distanceMatrix[i] = (double *)malloc(numOfCoords * sizeof(double));
+        for (int j = 0; j <= i; j++)
+        {
+            if (i == j)
+            {
+                distanceMatrix[i][j] = 0;
+            }
+            else
+            {
+                double distance = sqrt(pow(coords[i][0] - coords[j][0], 2) + pow(coords[i][1] - coords[j][1], 2));
+                distanceMatrix[i][j] = distanceMatrix[j][i] = distance;
+            }
+        }
+    }
+    return distanceMatrix;
+}
+
+// Function to free allocated memory
+void freeMemory(double **coords, double **distanceMatrix, int numOfCoords)
+{
+    for (int i = 0; i < numOfCoords; i++)
+    {
+        free(coords[i]);
+        free(distanceMatrix[i]);
+    }
+    free(coords);
+    free(distanceMatrix);
 }
 
 int *findShortestTour(double **distanceMatrix, int numOfCoords)
