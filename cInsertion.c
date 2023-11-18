@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 
 int readNumOfCoords(char *fileName);
 double **readCoords(char *filename, int numOfCoords);
@@ -25,11 +26,24 @@ int main(int argc, char *argv[])
     int numOfCoords = readNumOfCoords(argv[1]);
     double **coords = readCoords(argv[1], numOfCoords);
 
+    // Start timer after reading coordinates
+    clock_t start = clock();
+
     // Creating the distance matrix
     double **distanceMatrix = createDistanceMatrix(coords, numOfCoords);
 
     // Finding the shortest tour
     int *tour = findShortestTour(distanceMatrix, numOfCoords);
+
+    // Stop timer before writing to file
+    clock_t end = clock();
+
+    // Calculate and print the elapsed time
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Time spent: %.10f seconds\n", time_spent);
+
+    // Writing the tour to a file
+    writeTourToFile(tour, numOfCoords + 1, argv[2]);
 
     // Printing the tour
     for (int i = 0; i < numOfCoords + 1; i++)
@@ -37,9 +51,6 @@ int main(int argc, char *argv[])
         printf("%d ", tour[i]);
     }
     printf("\n");
-
-    // Writing the tour to a file
-    writeTourToFile(tour, numOfCoords + 1, argv[2]);
 
     // Freeing memory
     freeMemory(coords, distanceMatrix, numOfCoords);

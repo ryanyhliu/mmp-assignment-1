@@ -1,7 +1,7 @@
+# make ci && ./ci.exe 9_coords.coord cout_9_output.dat 
+# make ci && ./ci.exe 16_coords.coord cout_16_output.dat
+# make ci && ./ci.exe 4096_coords.coord cout_4096_output.dat
 ci: cInsertion.c coordReader.c
-	# make ci && ./ci.exe 9_coords.coord cout_9_output.dat 
-	# make ci && ./ci.exe 16_coords.coord cout_16_output.dat
-	# make ci && ./ci.exe 4096_coords.coord cout_4096_output.dat
 	gcc -g -std=c99 cInsertion.c coordReader.c -o ci.exe -lm
 	
 
