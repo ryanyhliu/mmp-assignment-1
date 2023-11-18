@@ -45,6 +45,9 @@ int main(int argc, char *argv[])
     // Writing the tour to a file
     writeTourToFile(tour, numOfCoords + 1, argv[2]);
 
+    // print tool length
+    printf("Tour length: %d\n", numOfCoords + 1);
+    
     // Printing the tour
     for (int i = 0; i < numOfCoords + 1; i++)
     {
