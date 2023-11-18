@@ -8,13 +8,13 @@
 int readNumOfCoords(char *fileName);
 double **readCoords(char *filename, int numOfCoords);
 void *writeTourToFile(int *tour, int tourLength, char *filename);
+int *findShortestTour(double **distanceMatrix, int numOfCoords);
 double **createDistanceMatrix(double **coords, int numOfCoords);
 void freeMemory(double **coords, double **distanceMatrix, int numOfCoords);
-int *findShortestTour(double **distanceMatrix, int numOfCoords);
 
 int main(int argc, char *argv[])
 {
-    printf("Starting cInsertion.c\n");
+    printf("Starting\n");
 
     // Checking command line arguments
     if (argc < 3)
@@ -56,41 +56,6 @@ int main(int argc, char *argv[])
     freeMemory(coords, distanceMatrix, numOfCoords);
     free(tour);
     return 0;
-}
-
-// Function to create a distance matrix
-double **createDistanceMatrix(double **coords, int numOfCoords)
-{
-    double **distanceMatrix = (double **)malloc(numOfCoords * sizeof(double *));
-    for (int i = 0; i < numOfCoords; i++)
-    {
-        distanceMatrix[i] = (double *)malloc(numOfCoords * sizeof(double));
-        for (int j = 0; j <= i; j++)
-        {
-            if (i == j)
-            {
-                distanceMatrix[i][j] = 0;
-            }
-            else
-            {
-                double distance = sqrt(pow(coords[i][0] - coords[j][0], 2) + pow(coords[i][1] - coords[j][1], 2));
-                distanceMatrix[i][j] = distanceMatrix[j][i] = distance;
-            }
-        }
-    }
-    return distanceMatrix;
-}
-
-// Function to free allocated memory
-void freeMemory(double **coords, double **distanceMatrix, int numOfCoords)
-{
-    for (int i = 0; i < numOfCoords; i++)
-    {
-        free(coords[i]);
-        free(distanceMatrix[i]);
-    }
-    free(coords);
-    free(distanceMatrix);
 }
 
 int *findShortestTour(double **distanceMatrix, int numOfCoords)
@@ -141,4 +106,39 @@ int *findShortestTour(double **distanceMatrix, int numOfCoords)
 
     free(visited);
     return tour;
+}
+
+// Function to create a distance matrix
+double **createDistanceMatrix(double **coords, int numOfCoords)
+{
+    double **distanceMatrix = (double **)malloc(numOfCoords * sizeof(double *));
+    for (int i = 0; i < numOfCoords; i++)
+    {
+        distanceMatrix[i] = (double *)malloc(numOfCoords * sizeof(double));
+        for (int j = 0; j <= i; j++)
+        {
+            if (i == j)
+            {
+                distanceMatrix[i][j] = 0;
+            }
+            else
+            {
+                double distance = sqrt(pow(coords[i][0] - coords[j][0], 2) + pow(coords[i][1] - coords[j][1], 2));
+                distanceMatrix[i][j] = distanceMatrix[j][i] = distance;
+            }
+        }
+    }
+    return distanceMatrix;
+}
+
+// Function to free allocated memory
+void freeMemory(double **coords, double **distanceMatrix, int numOfCoords)
+{
+    for (int i = 0; i < numOfCoords; i++)
+    {
+        free(coords[i]);
+        free(distanceMatrix[i]);
+    }
+    free(coords);
+    free(distanceMatrix);
 }

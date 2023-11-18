@@ -5,6 +5,9 @@ ci: cInsertion.c coordReader.c
 	gcc -g -std=c99 cInsertion.c coordReader.c -o ci.exe -lm
 	
 
+# make fi && ./fi.exe 9_coords.coord fout_9_output.dat
+# make fi && ./fi.exe 16_coords.coord fout_16_output.dat
+# make fi && ./fi.exe 4096_coords.coord fout_4096_output.dat
 fi: fInsertion.c coordReader.c
 	gcc -g -std=c99 fInsertion.c coordReader.c -o fi.exe -lm
 
