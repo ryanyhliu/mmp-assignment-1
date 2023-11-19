@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     // Calculate and print the elapsed time
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("Time spent: %.10f seconds\n", time_spent);
+    printf("Time spent: %.3f seconds\n", time_spent);
 
     // Writing the tour to a file
     writeTourToFile(tour, numOfCoords + 1, argv[2]);

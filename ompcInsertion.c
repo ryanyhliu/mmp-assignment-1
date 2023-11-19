@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
     // Calculate and print the elapsed time
     double time = omp_get_wtime() - start_time;
-    printf("Time spent: %.10f seconds\n", time);
+    printf("Time spent: %.3f seconds\n", time);
 
     // Writing the tour to a file
     writeTourToFile(tour, numOfCoords + 1, argv[2]);
