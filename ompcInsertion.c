@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     // print tool length
     printf("Tour length: %d\n", numOfCoords + 1);
-    
+
     // Printing the tour
     for (int i = 0; i < numOfCoords + 1; i++)
     {
@@ -71,40 +71,58 @@ int *findShortestTour(double **distanceMatrix, int numOfCoords)
 
     while (tourSize < numOfCoords)
     {
-        double minCost = INFINITY;
-        int minIndex = -1;
-        int insertPosition = -1;
+        double globalMinCost = INFINITY;
+        int globalMinIndex = -1;
+        int globalInsertPosition = -1;
 
-        // Find the cheapest insertion
-        for (int i = 0; i < numOfCoords; i++)
+#pragma omp parallel
         {
-            if (!visited[i])
+            double localMinCost = INFINITY;
+            int localMinIndex = -1;
+            int localInsertPosition = -1;
+
+// Parallel loop, each thread calculates its own minimum cost and related index
+#pragma omp for nowait
+            for (int i = 0; i < numOfCoords; i++)
             {
-                for (int j = 0; j < tourSize; j++)
+                if (!visited[i])
                 {
-                    int k = (j + 1) % tourSize;
-                    double cost = distanceMatrix[tour[j]][i] + distanceMatrix[i][tour[k]] - distanceMatrix[tour[j]][tour[k]];
-                    if (cost < minCost)
+                    for (int j = 0; j < tourSize; j++)
                     {
-                        minCost = cost;
-                        minIndex = i;
-                        insertPosition = j + 1;
+                        int k = (j + 1) % tourSize;
+                        double cost = distanceMatrix[tour[j]][i] + distanceMatrix[i][tour[k]] - distanceMatrix[tour[j]][tour[k]];
+                        if (cost < localMinCost)
+                        {
+                            localMinCost = cost;
+                            localMinIndex = i;
+                            localInsertPosition = j + 1;
+                        }
                     }
+                }
+            }
+
+// Single thread to update minimum values
+#pragma omp single
+            {
+                if (localMinCost < globalMinCost)
+                {
+                    globalMinCost = localMinCost;
+                    globalMinIndex = localMinIndex;
+                    globalInsertPosition = localInsertPosition;
                 }
             }
         }
 
-        // Insert minIndex at insertPosition
-        for (int i = tourSize; i >= insertPosition; i--)
+        // Use global minimum value to update tour
+        for (int i = tourSize; i >= globalInsertPosition; i--)
         {
             tour[i] = tour[i - 1];
         }
-        tour[insertPosition] = minIndex;
-        visited[minIndex] = true;
+        tour[globalInsertPosition] = globalMinIndex;
+        visited[globalMinIndex] = true;
         tourSize++;
     }
 
-    // Add the starting coordinate to the end
     tour[numOfCoords] = tour[0];
 
     free(visited);

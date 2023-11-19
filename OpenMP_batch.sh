@@ -26,8 +26,9 @@ echo "Requested CPUs per task      : $SLURM_CPUS_PER_TASK"
 echo "Scheduling priority          : $SLURM_PRIO_PROCESS"
 
 # parallel using OpenMP
-# SRC = $1 is name of the executable as an arguemnt
 EXE=$1
+COORD_FILE_NAME=$2
+OUTPUT_FILE_NAME=$3
 
 echo
 echo ------------------------------------
@@ -46,7 +47,8 @@ if test -x $EXE; then
       echo
 
       # run multiple times. Because we have exported how many threads we're using, we just execute the file.
-      for i in {1..5}; do ./${EXE}; done
+      # for i in {1..5}; do ./${EXE}; done
+      for i in {1..5}; do ./${EXE} $COORD_FILE_NAME $OUTPUT_FILE_NAME; done
 else
       echo $SRC did not built to $EXE
 fi

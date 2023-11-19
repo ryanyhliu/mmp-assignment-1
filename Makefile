@@ -11,38 +11,38 @@ ci: cInsertion.c coordReader.c
 fi: fInsertion.c coordReader.c
 	gcc -g -std=c99 fInsertion.c coordReader.c -o fi.exe -lm
 
-# sbatch -c 1 OpenMP_batch.sh comp.exe
-# sbatch -c 2 OpenMP_batch.sh comp.exe
-# sbatch -c 4 OpenMP_batch.sh comp.exe
-# sbatch -c 8 OpenMP_batch.sh comp.exe
-# sbatch -c 16 OpenMP_batch.sh comp.exe
-# sbatch -c 32 OpenMP_batch.sh comp.exe
+# sbatch -c 1 OpenMP_batch.sh comp.exe 4096_coords.coord ompcout_4096_output.dat
+# sbatch -c 2 OpenMP_batch.sh comp.exe 4096_coords.coord ompcout_4096_output.dat
+# sbatch -c 4 OpenMP_batch.sh comp.exe 4096_coords.coord ompcout_4096_output.dat
+# sbatch -c 8 OpenMP_batch.sh comp.exe 4096_coords.coord ompcout_4096_output.dat
+# sbatch -c 16 OpenMP_batch.sh comp.exe 4096_coords.coord ompcout_4096_output.dat
+# sbatch -c 32 OpenMP_batch.sh comp.exe 4096_coords.coord ompcout_4096_output.dat
 comp: ompcInsertion.c coordReader.c
 	gcc -fopenmp -std=c99 ompcInsertion.c coordReader.c -o comp.exe -lm
 
-# sbatch -c 1 OpenMP_batch.sh fomp.exe
-# sbatch -c 2 OpenMP_batch.sh fomp.exe
-# sbatch -c 4 OpenMP_batch.sh fomp.exe
-# sbatch -c 8 OpenMP_batch.sh fomp.exe
-# sbatch -c 16 OpenMP_batch.sh fomp.exe
-# sbatch -c 32 OpenMP_batch.sh fomp.exe
+# sbatch -c 1 OpenMP_batch.sh fomp.exe 4096_coords.coord ompfout_4096_output.dat
+# sbatch -c 2 OpenMP_batch.sh fomp.exe 4096_coords.coord ompfout_4096_output.dat
+# sbatch -c 4 OpenMP_batch.sh fomp.exe 4096_coords.coord ompfout_4096_output.dat
+# sbatch -c 8 OpenMP_batch.sh fomp.exe 4096_coords.coord ompfout_4096_output.dat
+# sbatch -c 16 OpenMP_batch.sh fomp.exe 4096_coords.coord ompfout_4096_output.dat
+# sbatch -c 32 OpenMP_batch.sh fomp.exe 4096_coords.coord ompfout_4096_output.dat
 fomp: ompfInsertion.c coordReader.c
 	gcc -fopenmp -std=c99 ompfInsertion.c coordReader.c -o fomp.exe -lm
 
-# sbatch -c 1 OpenMP_batch.sh icomp.exe
-# sbatch -c 2 OpenMP_batch.sh icomp.exe
-# sbatch -c 4 OpenMP_batch.sh icomp.exe
-# sbatch -c 8 OpenMP_batch.sh icomp.exe
-# sbatch -c 16 OpenMP_batch.sh icomp.exe
-# sbatch -c 32 OpenMP_batch.sh icomp.exe
+# sbatch -c 1 OpenMP_batch.sh icomp.exe 4096_coords.coord ompicout_4096_output.dat
+# sbatch -c 2 OpenMP_batch.sh icomp.exe 4096_coords.coord ompicout_4096_output.dat
+# sbatch -c 4 OpenMP_batch.sh icomp.exe 4096_coords.coord ompicout_4096_output.dat
+# sbatch -c 8 OpenMP_batch.sh icomp.exe 4096_coords.coord ompicout_4096_output.dat
+# sbatch -c 16 OpenMP_batch.sh icomp.exe 4096_coords.coord ompicout_4096_output.dat
+# sbatch -c 32 OpenMP_batch.sh icomp.exe 4096_coords.coord ompicout_4096_output.dat
 icomp: ompcInsertion.c coordReader.c
 	icc -qopenmp -std=c99 ompcInsertion.c coordReader.c -o icomp.exe -lm
 
-# sbatch -c 1 OpenMP_batch.sh ifomp.exe
-# sbatch -c 2 OpenMP_batch.sh ifomp.exe
-# sbatch -c 4 OpenMP_batch.sh ifomp.exe
-# sbatch -c 8 OpenMP_batch.sh ifomp.exe
-# sbatch -c 16 OpenMP_batch.sh ifomp.exe
-# sbatch -c 32 OpenMP_batch.sh ifomp.exe
+# sbatch -c 1 OpenMP_batch.sh ifomp.exe 4096_coords.coord ompifout_4096_output.dat
+# sbatch -c 2 OpenMP_batch.sh ifomp.exe 4096_coords.coord ompifout_4096_output.dat
+# sbatch -c 4 OpenMP_batch.sh ifomp.exe 4096_coords.coord ompifout_4096_output.dat
+# sbatch -c 8 OpenMP_batch.sh ifomp.exe 4096_coords.coord ompifout_4096_output.dat
+# sbatch -c 16 OpenMP_batch.sh ifomp.exe 4096_coords.coord ompifout_4096_output.dat
+# sbatch -c 32 OpenMP_batch.sh ifomp.exe 4096_coords.coord ompifout_4096_output.dat
 ifomp: ompfInsertion.c coordReader.c
 	icc -qopenmp -std=c99 ompfInsertion.c coordReader.c -o ifomp.exe -lm
