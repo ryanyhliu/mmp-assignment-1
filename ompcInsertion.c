@@ -102,7 +102,7 @@ int *findShortestTour(double **distanceMatrix, int numOfCoords)
             }
 
 // Single thread to update minimum values
-#pragma omp single
+#pragma omp critical
             {
                 if (localMinCost < globalMinCost)
                 {
