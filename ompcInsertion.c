@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
+#include <omp.h>
 
 int readNumOfCoords(char *fileName);
 double **readCoords(char *filename, int numOfCoords);
@@ -27,7 +28,7 @@ int main(int argc, char *argv[])
     double **coords = readCoords(argv[1], numOfCoords);
 
     // Start timer after reading coordinates
-    clock_t start = clock();
+    double start_time = omp_get_wtime();
 
     // Creating the distance matrix
     double **distanceMatrix = createDistanceMatrix(coords, numOfCoords);
@@ -35,12 +36,9 @@ int main(int argc, char *argv[])
     // Finding the shortest tour
     int *tour = findShortestTour(distanceMatrix, numOfCoords);
 
-    // Stop timer before writing to file
-    clock_t end = clock();
-
     // Calculate and print the elapsed time
-    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("Time spent: %.10f seconds\n", time_spent);
+    double time = omp_get_wtime() - start_time;
+    printf("Time spent: %.10f seconds\n", time);
 
     // Writing the tour to a file
     writeTourToFile(tour, numOfCoords + 1, argv[2]);
