@@ -71,14 +71,13 @@ int *findFarthestTour(double **distanceMatrix, int numOfCoords)
     {
         double globalMaxDistance = -1;
         int globalMaxIndex = -1;
+        double globalMinCost = INFINITY;
         int globalInsertPosition = -1;
 
 #pragma omp parallel
         {
             double localMaxDistance = -1;
             int localMaxIndex = -1;
-            int localInsertPosition = -1;
-            double localMinCost = INFINITY;
 
 // Find the farthest point to insert
 #pragma omp for nowait
@@ -88,7 +87,6 @@ int *findFarthestTour(double **distanceMatrix, int numOfCoords)
                 {
                     for (int j = 0; j < tourSize; j++)
                     {
-                        int k = (j + 1) % tourSize;
                         double distance = distanceMatrix[i][tour[j]];
                         if (distance > localMaxDistance)
                         {
